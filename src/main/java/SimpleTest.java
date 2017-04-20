@@ -1,5 +1,8 @@
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -7,22 +10,31 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.util.concurrent.TimeUnit;
 
+import static org.junit.Assert.assertTrue;
+
 /**
  * Created by techterr on 17.04.2017.
  */
 public class SimpleTest {
-    @Test
-    public void SearchRozetka (){
-        System.setProperty("webdriver.chrome.driver", "D:\\Java\\WebDrivers\\chromedriver.exe");
-        WebDriver driver = new ChromeDriver();
-        driver.manage().window().maximize();
-        driver.get("http://rozetka.com.ua");
 
-        WebElement serchField = driver.findElement(By.cssSelector(".rz-header-search-input-text"));
-        serchField.clear();
-        serchField.sendKeys("Asus Notebook");
-        driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS);
-        WebElement searchButton = driver.findElement(By.cssSelector(".btn-link-i"));
-        searchButton.click();
+   public static WebDriver driver;
+
+    @BeforeClass
+    public static void setUp(){
+        System.setProperty("webdriver.chrome.driver", "D:\\Soft\\WebDriver\\ChromeDriver\\chromedriver.exe");
+        driver = new ChromeDriver();
     }
+    @AfterClass
+    public static void closeChrome(){
+        driver.quit();
+    }
+    @Test
+    public void searchGoogle (){
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.manage().window().maximize();
+        driver.get("http://google.com/ncr");
+        driver.findElement(By.name("q")).sendKeys("selenium", Keys.ENTER);
+        assertTrue(driver.findElement(By.cssSelector(".srg .g:nth-child(1)")).getText().contains("Selenium"));
+    }
+
 }
